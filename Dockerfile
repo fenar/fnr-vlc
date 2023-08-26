@@ -3,8 +3,8 @@ FROM fedora:38
 ARG FNR_VLC_UID="1000"
 ARG FNR_VLC_GID="1000"
 
-ENV HOME="/media"
 ENV USER="vlc"
+ENV HOME="/home/vlc"
 
 # Set necessary labels for the Red Hat Universal Base Image
 LABEL name="fenar-vlc-streamer" \
@@ -12,7 +12,7 @@ LABEL name="fenar-vlc-streamer" \
       description="A container for streaming using VLC based on FEDORA:38 by Fatih E. NAR"
 
 # Install VLC, wget, curl, and iputils
-RUN dnf install -y wget curl iputils && \
+RUN dnf install -y wget curl iputils procps && \
     dnf clean all
 
 RUN groupadd -g "${FNR_VLC_GID}" vlc && \
@@ -24,12 +24,11 @@ RUN groupadd -g "${FNR_VLC_GID}" vlc && \
     dnf clean all
 
 USER ${USER}
-
 WORKDIR "home/${USER}"
 
 # Copy the sample.mp4 from origin host to the container
 RUN wget http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4
-RUN mv TearsOfSteel.mp4 fnr_sample.mp4
+RUN chown -R $USER:$USER $HOME/
 
-# Set the command to run VLC for HTTP streaming
-# CMD ["vlc", "fnr_sample.mp4", "--sout", "#standard{access=http,mux=ts,dst=:8080}", "-I", "dummy"]
+# Set the command to run VLC for HTTP streaming: This is for Docker Desktop Easy Test
+# CMD ["vlc", "TearsOfSteel.mp4", "--sout", "#standard{access=http,mux=ts,dst=:8080}", "-I", "dummy"]

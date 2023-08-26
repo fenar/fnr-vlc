@@ -51,7 +51,7 @@ spec:
         imagePullPolicy: Always
         image: "quay.io/narlabs/fnr-vlc:latest"
         command: ["/bin/sh","-c"]
-        args: ["vlc fnr_sample.mp4 --sout '#standard{access=http,mux=ts,dst=:8080}' -I dummy; while true; do sleep 30; done;"]
+        args: ["vlc fnr_sample.mp4 --sout '#standard{access=http,mux=ts,dst=:8080}' -I dummy"]
         securityContext:
           runAsNonRoot: true
           allowPrivilegeEscalation: false

@@ -51,4 +51,4 @@ spec:
       - name: vlc-origin
         imagePullPolicy: IfNotPresent
         image: "quay.io/narlabs/fnr-vlc:latest"
-        command: ["/bin/sh","-c","vlc fnr_sample.mp4 --sout standard{access=http,mux=ts,dst=:8080} -I dummy"]
+        command: ["/bin/sh","-c","vlc fnr_sample.mp4 --sout #standard{access=http,mux=ts,dst=:8080} -I dummy"]

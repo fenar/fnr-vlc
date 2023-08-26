@@ -2,7 +2,6 @@ kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
   name: vlc
-  namespace: vlc-streaming
   labels:
     app: vlc
 spec:
@@ -49,6 +48,15 @@ spec:
     spec:
       containers:
       - name: vlc-origin
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         image: "quay.io/narlabs/fnr-vlc:latest"
-        command: ["/bin/sh","-c","vlc fnr_sample.mp4 --sout #standard{access=http,mux=ts,dst=:8080} -I dummy"]
+        command: ["/bin/sh","-c"]
+        args: ["vlc fnr_sample.mp4 --sout '#standard{access=http,mux=ts,dst=:8080}' -I dummy; while true; do sleep 30; done;"]
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault

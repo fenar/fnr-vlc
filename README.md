@@ -1,2 +1,2 @@
 # fnr-vlc
-video streaming with k8s
+vlc http video streaming with k8s

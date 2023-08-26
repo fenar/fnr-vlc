@@ -12,11 +12,17 @@ LABEL name="fenar-vlc-streamer" \
       description="A container for streaming using VLC based on FEDORA:38 by Fatih E. NAR"
 
 # Install VLC, wget, curl, and iputils
-RUN dnf install -y wget curl iputils procps && \
+RUN dnf install -y wget curl iputils procps sudo iproute && \
+    dnf clean all
+
+RUN dnf install -y alsa-plugins-pulseaudio && \
     dnf clean all
 
 RUN groupadd -g "${FNR_VLC_GID}" vlc && \
     useradd -m -d /data -s /bin/sh -u "${FNR_VLC_UID}" -g "${FNR_VLC_GID}" "${USER}" && \
+    echo "vlc:vlc" | chpasswd && \
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
+    usermod -aG wheel "${USER}" && \
     dnf upgrade -y && \
     rpm -ivh "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-38.noarch.rpm" && \
     dnf upgrade -y && \

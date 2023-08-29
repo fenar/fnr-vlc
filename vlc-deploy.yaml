@@ -14,7 +14,7 @@ spec:
       targetPort: 8080
       nodePort: 30680
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vlc
@@ -34,7 +34,5 @@ spec:
       - name: vlc-origin
         imagePullPolicy: Always
         image: "quay.io/narlabs/fnr-vlc:latest"
-        securityContext:
-          privileged: true
         command: ["/bin/sh","-c"]
         args: ["vlc fnr_sample.mp4 --sout '#standard{access=http,mux=ts,dst=:8080}' -I dummy"]
